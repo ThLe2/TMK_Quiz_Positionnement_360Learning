@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quiz de positionnement initial - Gestion des sinistres corporels</title>
+  <style>
+    :root {
+      --tmk-blue: #0f4c81;
+      --tmk-blue-dark: #0a3558;
+      --tmk-gold: #c8a96b;
+      --tmk-bg: #f4f7fb;
+      --tmk-white: #ffffff;
+      --tmk-text: #1f2937;
+      --tmk-muted: #6b7280;
+      --tmk-border: #d9e2ec;
+      --tmk-success: #1f7a3e;
+      --tmk-success-bg: #eefaf1;
+      --tmk-error: #b42318;
+      --tmk-error-bg: #fef3f2;
+      --tmk-card: #f9fbfd;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial, Helvetica, sans-serif;
+      background: linear-gradient(180deg, #eef3f8 0%, #f8fafc 100%);
+      color: var(--tmk-text);
+    }
+
+    .tmk-header {
+      background: var(--tmk-white);
+      border-bottom: 4px solid var(--tmk-gold);
+      text-align: center;
+      padding: 18px 15px;
+      box-shadow: 0 2px 8px rgba(15, 76, 129, 0.08);
+    }
+
+    .tmk-header img {
+      max-width: 220px;
+      width: 100%;
+      height: auto;
+    }
+
+    .page-wrap {
+      max-width: 980px;
+      margin: 32px auto;
+      padding: 0 20px;
+    }
+
+    .quiz-shell {
+      background: var(--tmk-white);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(15, 76, 129, 0.10);
+      overflow: hidden;
+      border: 1px solid #e8eef5;
+    }
+
+    .hero {
+      background: linear-gradient(135deg, var(--tmk-blue) 0%, var(--tmk-blue-dark) 100%);
+      color: white;
+      padding: 30px;
+    }
+
+    .hero h1 {
+      margin: 0 0 10px;
+      font-size: 30px;
+      line-height: 1.2;
+    }
+
+    .hero p {
+      margin: 0;
+      font-size: 16px;
+      line-height: 1.6;
+      color: rgba(255, 255, 255, 0.92);
+    }
+
+    .hero-badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.18);
+      color: #fff;
+      padding: 8px 14px;
+      border-radius: 999px;
+      font-size: 13px;
+      margin-bottom: 14px;
+      letter-spacing: 0.2px;
+    }
+
+    .content {
+      padding: 30px;
+    }
+
+    .intro {
+      background: #f1f7fc;
+      border-left: 5px solid var(--tmk-blue);
+      border-radius: 10px;
+      padding: 18px;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    .question {
+      background: var(--tmk-card);
+      border: 1px solid var(--tmk-border);
+      border-radius: 14px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+
+    .question h3 {
+      margin: 0 0 14px;
+      font-size: 18px;
+      color: var(--tmk-blue-dark);
+      line-height: 1.4;
+    }
+
+    .options {
+      display: grid;
+      gap: 10px;
+    }
+
+    .option {
+      display: block;
+      background: #fff;
+      border: 1px solid #d7e3ef;
+      border-radius: 10px;
+      padding: 12px 14px;
+      transition: all 0.2s ease;
+      cursor: pointer;
+    }
+
+    .option:hover {
+      border-color: var(--tmk-blue);
+      background: #f8fbfe;
+    }
+
+    .option input {
+      margin-right: 10px;
+      transform: translateY(1px);
+    }
+
+    .actions {
+      margin-top: 28px;
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    button {
+      border: none;
+      border-radius: 10px;
+      padding: 14px 22px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: 0.2s ease;
+    }
+
+    .btn-primary {
+      background: var(--tmk-blue);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--tmk-blue-dark);
+    }
+
+    .btn-secondary {
+      background: #eef2f7;
+      color: var(--tmk-blue-dark);
+      border: 1px solid #d6e0ea;
+    }
+
+    .btn-secondary:hover {
+      background: #e4ebf3;
+    }
+
+    .results {
+      display: none;
+      margin-top: 30px;
+      background: #fcfdff;
+      border: 1px solid #dbe7f3;
+      border-radius: 14px;
+      padding: 24px;
+    }
+
+    .score-box {
+      background: linear-gradient(135deg, #eef6fc 0%, #f8fbff 100%);
+      border: 1px solid #d6e5f2;
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 22px;
+    }
+
+    .score-box h2 {
+      margin: 0 0 8px;
+      color: var(--tmk-blue-dark);
+      font-size: 24px;
+    }
+
+    .score-box p {
+      margin: 0;
+      color: var(--tmk-muted);
+      line-height: 1.5;
+    }
+
+    .result-item {
+      border-radius: 12px;
+      padding: 16px;
+      margin-bottom: 16px;
+      border-left: 6px solid #cbd5e1;
+      background: white;
+      box-shadow: 0 2px 8px rgba(15, 76, 129, 0.04);
+    }
+
+    .result-item.correct {
+      border-left-color: var(--tmk-success);
+      background: var(--tmk-success-bg);
+    }
+
+    .result-item.incorrect {
+      border-left-color: var(--tmk-error);
+      background: var(--tmk-error-bg);
+    }
+
+    .result-title {
+      font-weight: bold;
+      margin-bottom: 8px;
+      color: #111827;
+    }
+
+    .answer {
+      font-weight: bold;
+      margin-bottom: 6px;
+    }
+
+    .explanation {
+      line-height: 1.5;
+    }
+
+    .footer-note {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid #e5edf5;
+      color: var(--tmk-muted);
+      font-style: italic;
+      line-height: 1.5;
+    }
+
+    .status-line {
+      margin-top: 12px;
+      font-size: 14px;
+      color: var(--tmk-muted);
+    }
+
+    .tmk-footer {
+      text-align: center;
+      color: #6b7280;
+      padding: 24px 16px 36px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 700px) {
+      .hero {
+        padding: 24px 20px;
+      }
+
+      .content {
+        padding: 20px;
+      }
+
+      .hero h1 {
+        font-size: 24px;
+      }
+
+      .question h3 {
+        font-size: 17px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="tmk-header">
+    <img src="assets/logo.png" alt="TMK Performances">
+  </div>
+
+  <div class="page-wrap">
+    <div class="quiz-shell">
+      <div class="hero">
+        <div class="hero-badge">Parcours @learning • Banque • Assurance • Relation client</div>
+        <h1>Quiz de positionnement initial</h1>
+        <p>
+          Module : <strong>Gestion des sinistres corporels</strong><br>
+          Ce quiz permet d’évaluer les connaissances de départ des apprenants avant l’entrée dans le parcours de formation.
+        </p>
+      </div>
+
+      <div class="content">
+        <div class="intro">
+          Répondez aux questions ci-dessous puis cliquez sur <strong>« Voir mon résultat »</strong>.
+          À la fin du quiz, votre <strong>score</strong>, les <strong>bonnes réponses</strong> et une
+          <strong>explication pédagogique</strong> s’afficheront automatiquement.
+        </div>
+
+        <form id="quizForm">
+
+          <div class="question">
+            <h3>1. Un conducteur responsable est-il toujours indemnisé de ses blessures ?</h3>
+            <div class="options">
+              <label class="option"><input type="radio" name="q1" value="a"> Oui, dans tous les cas</label>
+              <label class="option"><input type="radio" name="q1" value="b"> Non, cela dépend notamment des garanties souscrites au contrat</label>
+              <label class="option"><input type="radio" name="q1" value="c"> Oui, seulement si un tiers est impliqué</label>
+            </div>
+          </div>
+
+          <div class="question">
+            <h3>2. Une victime blessée est-elle automatiquement indemnisée ?</h3>
+            <div class="options">
+              <label class="option"><input type="radio" name="q2" value="a"> Oui, dès lors qu’elle déclare un accident</label>
+              <label class="option"><input type="radio" name="q2" value="b"> Non, l’indemnisation dépend de la situation, des garanties et de l’analyse du dossier</label>
+              <label class="option"><input type="radio" name="q2" value="c"> Oui, uniquement si elle présente un certificat médical</label>
+            </div>
+          </div>
+
+          <div class="question">
+            <h3>3. Qu’est-ce qu’une exclusion de garantie ?</h3>
+            <div class="options">
+              <label class="option"><input type="radio" name="q3" value="a"> Une situation prévue au contrat dans laquelle l’assureur ne prend pas en charge le sinistre</label>
+              <label class="option"><input type="radio" name="q3" value="b"> Une pièce manquante dans le dossier</label>
+              <label class="option"><input type="radio" name="q3" value="c"> Une demande de remboursement complémentaire</label>
+            </div>
+          </div>
+
+          <div class="question">
+            <h3>4. Parmi les éléments suivants, lequel est indispensable pour ouvrir un dossier corporel ?</h3>
+            <div class="options">
+              <label class="option"><input type="radio" name="q4" value="a"> Le numéro d’immatriculation seul</label>
+              <label class="option"><input type="radio" name="q4" value="b"> Des informations sur les circonstances, les personnes impliquées et la nature des blessures</label>
+              <label class="option"><input type="radio" name="q4" value="c"> Le montant estimé de l’indemnisation finale</label>
+            </div>
+          </div>
+
+          <div class="question">
+            <h3>5. Quelle est la principale différence entre un sinistre matériel et un sinistre corporel ?</h3>
+            <div class="options">
+              <label class="option"><input type="radio" name="q5" value="a"> Le sinistre corporel concerne une atteinte à la personne, physique ou psychique</label>
+              <label class="option"><input type="radio" name="q5" value="b"> Le sinistre corporel est toujours plus rapide à traiter</label>
+              <label class="option"><input type="radio" name="q5" value="c"> Le sinistre matériel nécessite toujours une expertise médicale</label>
+            </div>
+          </div>
+
+          <div class="question">
+            <h3>6. Quel document ou élément peut être utile dès le début d’un dossier corporel ?</h3>
+            <div class="options">
+              <label class="option"><input type="radio" name="q6" value="a"> Un certificat médical initial ou les premiers éléments médicaux</label>
+              <label class="option"><input type="radio" name="q6" value="b"> Un devis de réparation du véhicule uniquement</label>
+              <label class="option"><input type="radio" name="q6" value="c"> La clôture du dossier</label>
+            </div>
+          </div>
+
+          <div class="question">
+            <h3>7. Le gestionnaire de sinistre corporel doit-il uniquement vérifier le contrat ?</h3>
+            <div class="options">
+              <label class="option"><input type="radio" name="q7" value="a"> Oui, le contrat suffit pour indemniser</label>
+              <label class="option"><input type="radio" name="q7" value="b"> Non, il doit aussi analyser les circonstances, les responsabilités, les pièces médicales et la situation de la victime</label>
+              <label class="option"><input type="radio" name="q7" value="c"> Oui, si la victime est blessée</label>
+            </div>
+          </div>
+
+          <div class="actions">
+            <button type="button" class="btn-primary" onclick="corrigerQuiz()">Voir mon résultat</button>
+            <button type="button" class="btn-secondary" onclick="reinitialiserQuiz()">Recommencer</button>
+          </div>
+        </form>
+
+        <div id="results" class="results"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="tmk-footer">
+    © <script>document.write(new Date().getFullYear());</script> TMK Performances
+  </div>
+
+  <script>
+    const reponsesCorrectes = {
+      q1: "b",
+      q2: "b",
+      q3: "a",
+      q4: "b",
+      q5: "a",
+      q6: "a",
+      q7: "b"
+    };
+
+    const corrections = {
+      q1: {
+        bonne: "Non, cela dépend notamment des garanties souscrites au contrat.",
+        explication: "Le conducteur responsable n’est pas systématiquement indemnisé de ses propres blessures. Cela dépend notamment de l’existence d’une garantie du conducteur et des conditions prévues au contrat."
+      },
+      q2: {
+        bonne: "Non, l’indemnisation dépend de la situation, des garanties et de l’analyse du dossier.",
+        explication: "Une blessure ne suffit pas à elle seule à déclencher automatiquement une indemnisation. Il faut analyser le contexte, la qualité de la victime, les garanties mobilisables et les pièces du dossier."
+      },
+      q3: {
+        bonne: "Une situation prévue au contrat dans laquelle l’assureur ne prend pas en charge le sinistre.",
+        explication: "L’exclusion de garantie limite la prise en charge de l’assureur dans certaines situations clairement prévues au contrat."
+      },
+      q4: {
+        bonne: "Des informations sur les circonstances, les personnes impliquées et la nature des blessures.",
+        explication: "L’ouverture d’un dossier corporel nécessite au minimum des éléments sur l’accident, les personnes concernées et les atteintes subies."
+      },
+      q5: {
+        bonne: "Le sinistre corporel concerne une atteinte à la personne, physique ou psychique.",
+        explication: "Le sinistre matériel porte sur les biens, alors que le sinistre corporel concerne les dommages subis par une personne."
+      },
+      q6: {
+        bonne: "Un certificat médical initial ou les premiers éléments médicaux.",
+        explication: "Les premiers éléments médicaux permettent de qualifier les blessures et d’engager l’instruction du dossier corporel."
+      },
+      q7: {
+        bonne: "Non, il doit aussi analyser les circonstances, les responsabilités, les pièces médicales et la situation de la victime.",
+        explication: "La gestion d’un dossier corporel ne repose pas uniquement sur le contrat. Elle implique aussi une analyse factuelle, médicale et juridique."
+      }
+    };
+
+    let scorm = {
+      api: null,
+      initialized: false
+    };
+
+    function findAPI(win) {
+      let tries = 0;
+      while ((win.API == null) && (win.parent != null) && (win.parent != win)) {
+        tries++;
+        if (tries > 20) return null;
+        win = win.parent;
+      }
+      return win.API;
+    }
+
+    function initSCORM() {
+      scorm.api = findAPI(window);
+      if (scorm.api) {
+        const result = scorm.api.LMSInitialize("");
+        scorm.initialized = (result === "true");
+      }
+    }
+
+    function scormSetValue(element, value) {
+      if (!scorm.api || !scorm.initialized) return false;
+      return scorm.api.LMSSetValue(element, value);
+    }
+
+    function scormCommit() {
+      if (!scorm.api || !scorm.initialized) return false;
+      return scorm.api.LMSCommit("");
+    }
+
+    function scormFinish() {
+      if (!scorm.api || !scorm.initialized) return false;
+      return scorm.api.LMSFinish("");
+    }
+
+    function enregistrerScoreSCORM(score, total) {
+      if (!scorm.api || !scorm.initialized) return;
+
+      const percent = Math.round((score / total) * 100);
+
+      scormSetValue("cmi.core.score.min", "0");
+      scormSetValue("cmi.core.score.max", "100");
+      scormSetValue("cmi.core.score.raw", String(percent));
+      scormSetValue("cmi.core.lesson_status", percent >= 70 ? "passed" : "completed");
+      scormCommit();
+    }
+
+    function corrigerQuiz() {
+      let score = 0;
+      const total = Object.keys(reponsesCorrectes).length;
+      let html = "";
+
+      for (let question in reponsesCorrectes) {
+        const reponseUtilisateur = document.querySelector(`input[name="${question}"]:checked`);
+        const estCorrect = reponseUtilisateur && reponseUtilisateur.value === reponsesCorrectes[question];
+
+        if (estCorrect) score++;
+
+        html += `
+          <div class="result-item ${estCorrect ? 'correct' : 'incorrect'}">
+            <div class="result-title">${question.toUpperCase()} — ${estCorrect ? 'Bonne réponse' : 'Réponse incorrecte ou non renseignée'}</div>
+            <div class="answer">Bonne réponse : ${corrections[question].bonne}</div>
+            <div class="explanation">${corrections[question].explication}</div>
+          </div>
+        `;
+      }
+
+      const pourcentage = Math.round((score / total) * 100);
+
+      let appreciation = "";
+      if (pourcentage >= 85) {
+        appreciation = "Très bon niveau de connaissances initiales.";
+      } else if (pourcentage >= 60) {
+        appreciation = "Bon socle de départ, à consolider pendant la formation.";
+      } else {
+        appreciation = "Ce positionnement met en évidence plusieurs notions à découvrir ou à approfondir pendant le module.";
+      }
+
+      const scormStatus = (scorm.api && scorm.initialized)
+        ? "Suivi LMS détecté : score transmis au module SCORM"
+        : "Suivi LMS non détecté : fonctionnement autonome";
+
+      document.getElementById("results").innerHTML = `
+        <div class="score-box">
+          <h2>Votre score : ${score} / ${total} (${pourcentage}%)</h2>
+          <p>${appreciation}</p>
+          <div class="status-line">${scormStatus}</div>
+        </div>
+        ${html}
+        <div class="footer-note">
+          Ce quiz de positionnement permet d’identifier les acquis de départ. Il ne constitue pas une évaluation certificative.
+        </div>
+      `;
+
+      document.getElementById("results").style.display = "block";
+      enregistrerScoreSCORM(score, total);
+
+      window.scrollTo({
+        top: document.getElementById("results").offsetTop - 20,
+        behavior: "smooth"
+      });
+    }
+
+    function reinitialiserQuiz() {
+      document.getElementById("quizForm").reset();
+      document.getElementById("results").style.display = "none";
+      document.getElementById("results").innerHTML = "";
+      window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+      });
+    }
+
+    window.addEventListener("load", initSCORM);
+    window.addEventListener("beforeunload", scormFinish);
+  </script>
+</body>
+</html>
