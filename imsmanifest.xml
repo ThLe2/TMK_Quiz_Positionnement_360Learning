@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<manifest identifier="TMK_QUIZ_POSITIONNEMENT_SINISTRES_CORPORELS"
+          version="1.0"
+          xmlns="[imsproject.org](http://www.imsproject.org/xsd/imscp_rootv1p1p2)"
+          xmlns:adlcp="[adlnet.org](http://www.adlnet.org/xsd/adlcp_rootv1p2)"
+          xmlns:xsi="[w3.org](http://www.w3.org/2001/XMLSchema-instance)"
+          xsi:schemaLocation="
+            [imsproject.org](http://www.imsproject.org/xsd/imscp_rootv1p1p2) imscp_rootv1p1p2.xsd
+            [adlnet.org](http://www.adlnet.org/xsd/adlcp_rootv1p2) adlcp_rootv1p2.xsd">
+
+  <metadata>
+    <schema>ADL SCORM</schema>
+    <schemaversion>1.2</schemaversion>
+  </metadata>
+
+  <organizations default="ORG-1">
+    <organization identifier="ORG-1">
+      <title>Quiz de positionnement initial - Gestion des sinistres corporels</title>
+      <item identifier="ITEM-1" identifierref="RES-1">
+        <title>Quiz de positionnement initial</title>
+      </item>
+    </organization>
+  </organizations>
+
+  <resources>
+    <resource identifier="RES-1"
+              type="webcontent"
+              adlcp:scormtype="sco"
+              href="index.html">
+      <file href="index.html"/>
+      <file href="assets/logo.png"/>
+    </resource>
+  </resources>
+</manifest>
