@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <manifest identifier="TMK_QUIZ_POSITIONNEMENT_SINISTRES_CORPORELS"
           version="1.0"
           xmlns="[imsproject.org](http://www.imsproject.org/xsd/imscp_rootv1p1p2)"
@@ -31,4 +32,6 @@
       <file href="assets/logo.png"/>
     </resource>
   </resources>
+
 </manifest>
+
